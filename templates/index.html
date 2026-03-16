@@ -3,40 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MARK SPLITTER</title>
+    <title>Mark Splitter | Intelligent Excel Processor</title>
     <link rel="icon" href="../static/images/images (1) (19).jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../static/css/style.css">
 </head>
-
 <body>
-    <div>
-    <h2>MARK <br> SPLITTER</h2></div>
-    <h1>Upload Excel File</h1>
-    <form action="/process" method="post" enctype="multipart/form-data">
-        <label for="file">Choose Excel file:</label>
-        <input type="file" name="file" id="file" required><br><br>
+    <div class="background-overlay"></div>
+    <div class="container">
+        <header class="main-header">
+            <div class="logo-circle"></div>
+            <h1>MARK<span>SPLITTER</span></h1>
+            <p>Effortlessly split, manage, and process your exam marks with precision.</p>
+        </header>
 
-        <label for="colm1">Enter column name for Total Marks:</label>
-        <input type="text" name="colm1" id="colm1" required><br><br>
+        <main class="main-content">
+            <section class="upload-section glass-panel">
+                <div class="panel-header">
+                    <h2><span class="icon">📊</span> Upload Data</h2>
+                </div>
+                <form action="/process" method="post" enctype="multipart/form-data">
+                    <div class="input-group file-input-group">
+                        <label for="file" class="file-label">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                            <span id="file-name-display">Choose Excel File (.xlsx)</span>
+                        </label>
+                        <input type="file" name="file" id="file" accept=".xlsx, .xls" required>
+                    </div>
 
-        <label for="colm2">Enter column name for Student Name:</label>
-        <input type="text" name="colm2" id="colm2" required><br><br>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="colm1">Total Marks Column:</label>
+                            <input type="text" name="colm1" id="colm1" placeholder="e.g. Total Marks" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="colm2">Student Name Column:</label>
+                            <input type="text" name="colm2" id="colm2" placeholder="e.g. Roll No" required>
+                        </div>
+                    </div>
 
-        <button type="submit">Process File</button>
-    </form><br> 
-    <div class="inst">
-    <h3>INSTRUCTION</h3>
-    <ol>
-        <li>In this website only we use under 50 mark in that excel sheet.</li>
-        <li> Make sure in this website it will only access excell sheet. </li>
-        <li> First column to enter the roll number or any name you want , next column to enter the mark .</li>
-    </ol>
-    <h5 class="namei">Input file </h5>
-    <h5 class="nameii">output file </h5>
+                    <div class="input-group">
+                        <label for="max_total">Select Max Marks Layout:</label>
+                        <select name="max_total" id="max_total" class="form-select" required>
+                            <option value="50">50 Marks (Part B: 11A-13B)</option>
+                            <option value="60">60 Marks (Part B: 11-15)</option>
+                            <option value="75">75 Marks (Part B: 11-15)</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span class="btn-text">Process File</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        <div class="loader" id="loader" style="display: none;"></div>
+                    </button>
+                    <p id="error-msg" class="error-msg" style="display: none; color: #ff4b4b; margin-top: 10px; font-size: 0.9rem; text-align: center;"></p>
+                </form>
+            </section>
+
+            <section class="sidebar-section">
+                <div class="instruction-card glass-panel">
+                    <h3><span class="icon">ℹ️</span> Instructions</h3>
+                    <ul class="instruction-list">
+                        <li>This tool supports maximum marks of <strong>50, 60, or 75</strong>. Select your layout from the dropdown.</li>
+                        <li>Upload valid <strong>Excel (.xlsx)</strong> files only.</li>
+                        <li>First column should contain Roll Number or Student Name.</li>
+                        <li>Column names provided must match <strong>exactly</strong> as they appear in the sheet.</li>
+                    </ul>
+                </div>
+
+                <div class="preview-card glass-panel">
+                    <h3><span class="icon">👁️</span> Format Examples</h3>
+                    <div class="img-preview-container">
+                        <div class="img-box">
+                            <span class="img-badge">Input</span>
+                            <img src="../static/images/Capture.JPG" alt="input preview" class="preview-img">
+                        </div>
+                        <div class="img-box">
+                            <span class="img-badge">Output</span>
+                            <img src="../static/images/output.JPG" alt="output preview" class="preview-img">
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2026 Mark Splitter Tool. Engineered for precision.</p>
+        </footer>
     </div>
- 
-    <div class="inimgdiv"><img src="../static/images/Capture.JPG" alt="input image" class="inimg">
-    <img src="../static/images/output.JPG" alt="output image" class="inimg1"></div>
-    
+
+    <script>
+        document.getElementById('file').addEventListener('change', function(e) {
+            const fileName = e.target.files[0] ? e.target.files[0].name : 'Choose Excel File (.xlsx)';
+            const labelSpan = document.getElementById('file-name-display');
+            labelSpan.textContent = fileName;
+        });
+
+        // Optional: Adding basic client-side validation logic
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            const fileInput = document.getElementById('file');
+            const file = fileInput.files[0];
+            const errorMsg = document.getElementById('error-msg');
+            
+            if (file && !file.name.match(/\.(xlsx|xls)$/i)) {
+                e.preventDefault();
+                errorMsg.textContent = 'Please select a valid Excel file (.xlsx or .xls)';
+                errorMsg.style.display = 'block';
+                return;
+            }
+            errorMsg.style.display = 'none';
+
+            // Show loader
+            document.querySelector('.btn-text').style.display = 'none';
+            document.querySelector('.btn-icon').style.display = 'none';
+            document.getElementById('loader').style.display = 'block';
+        });
+    </script>
 </body>
 </html>

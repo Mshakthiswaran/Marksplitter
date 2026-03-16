@@ -28,6 +28,19 @@ def process_file():
     # Get column names from form
     colm1 = request.form['colm1']
     colm2 = request.form['colm2']
+    max_total = int(request.form.get('max_total', 50))
+
+    if max_total == 50:
+        ques2 = ['11.A', '11.B', '12.A', '12.B', '13.A', '13.B']
+    elif max_total == 60:
+        ques2 = ['11', '12', '13', '14', '15']
+    elif max_total == 75:
+        ques2 = ['11', '12', '13', '14', '15']
+    else:
+        return "Invalid max total layout!", 400
+
+    num_b_cols = len(ques2)
+    partB_max = max_total - 20
 
     # Check if columns exist
     if colm1 not in df.columns or colm2 not in df.columns:
@@ -41,17 +54,26 @@ def process_file():
     row = []
 
     for i in range(len(total_mark)):
+        total_mark_val = total_mark[i]
+        if pd.isna(total_mark_val):
+            total_mark_val = 0
+        total_mark_val = int(total_mark_val)
+
+        if total_mark_val > max_total:
+            total_mark_val = max_total
+
         # Calculate Part A and Part B marks
-        if 0 <= total_mark[i] <= 10:
-            partA = total_mark[i]
+        if 0 <= total_mark_val <= 10:
+            partA = total_mark_val
             partB = 0
-        elif 11 <= total_mark[i] <= 30:
-            partA = random.randint(13, 20)
-            partB = total_mark[i] - partA
+        elif 11 <= total_mark_val <= partB_max:
+            partA_min = max(13, total_mark_val - partB_max)
+            partA = random.randint(min(partA_min, total_mark_val), min(20, total_mark_val))
+            partB = total_mark_val - partA
         else:
-            min_val = 20 - (50 - total_mark[i])
-            partA = random.randint(min_val, 20)
-            partB = total_mark[i] - partA
+            min_val = 20 - (max_total - total_mark_val)
+            partA = random.randint(max(0, min_val), 20)
+            partB = total_mark_val - partA
 
         # Split Part A marks
         A = []
@@ -66,26 +88,25 @@ def process_file():
             A.append(0)
         random.shuffle(A)
 
-        # Split Part B marks for 3 questions
+        # Split Part B marks
         B = []
-        a = partB // 6
-        b = partB % 6
+        a = partB // num_b_cols
+        b = partB % num_b_cols
         for k in range(b):
             B.append(a + 1)
-        for k in range(6 - b):
+        for k in range(num_b_cols - b):
             B.append(a)
         random.shuffle(B)
 
         # Combine data for each row
-        t_mark = [total_mark[i]]
+        t_mark = [total_mark_val]
         s_name = [st_name[i]]
         split_marks = s_name + A + B + t_mark
         row.append(split_marks)
 
     # Define column names
     ques1 = ['Roll no', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
-    ques2 = ['11.A', '11.B', '12.A', '12.B', '13.A', '13.B', 'Total mark']
-    col = ques1 + ques2
+    col = ques1 + ques2 + ['Total mark']
 
     # Create a DataFrame
     df_result = pd.DataFrame(row, columns=col)
