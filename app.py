@@ -1,8 +1,7 @@
-from flask import Flask, render_template, request, redirect, send_file
+from flask import Flask, render_template, request, send_file
 import pandas as pd
 import random
 import io
-import os
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -22,13 +21,23 @@ def process_file():
     if file.filename == '':
         return "No file selected!", 400
 
-    # Read the uploaded Excel file
-    df = pd.read_excel(file)
+    # Read the uploaded Excel file with guarded parsing.
+    try:
+        df = pd.read_excel(file)
+    except Exception:
+        return "Invalid or unreadable Excel file!", 400
 
     # Get column names from form
-    colm1 = request.form['colm1']
-    colm2 = request.form['colm2']
-    max_total = int(request.form.get('max_total', 50))
+    colm1 = request.form.get('colm1', '').strip()
+    colm2 = request.form.get('colm2', '').strip()
+    if not colm1 or not colm2:
+        return "Column names are required!", 400
+
+    max_total_raw = request.form.get('max_total', '50')
+    try:
+        max_total = int(max_total_raw)
+    except (TypeError, ValueError):
+        return "Invalid max total layout!", 400
 
     if max_total == 50:
         ques2 = ['11.A', '11.B', '12.A', '12.B', '13.A', '13.B']
@@ -123,5 +132,5 @@ def process_file():
 
 # Run the Flask app
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
 

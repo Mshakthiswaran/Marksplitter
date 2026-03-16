@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mark Splitter | Intelligent Excel Processor</title>
-    <link rel="icon" href="../static/images/images (1) (19).jpeg">
+    <link rel="icon" href="{{ url_for('static', filename='images/images (1) (19).jpeg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="background-overlay"></div>
@@ -78,11 +78,11 @@
                     <div class="img-preview-container">
                         <div class="img-box">
                             <span class="img-badge">Input</span>
-                            <img src="../static/images/Capture.JPG" alt="input preview" class="preview-img">
+                            <img src="{{ url_for('static', filename='images/Capture.JPG') }}" alt="input preview" class="preview-img">
                         </div>
                         <div class="img-box">
                             <span class="img-badge">Output</span>
-                            <img src="../static/images/output.JPG" alt="output preview" class="preview-img">
+                            <img src="{{ url_for('static', filename='images/output.JPG') }}" alt="output preview" class="preview-img">
                         </div>
                     </div>
                 </div>
